@@ -32,7 +32,8 @@ app.post('/api/messages', (req, res) => {
     const message = req.body.message;
     pusher.trigger('chat-app-test', 'test-event', {
         message: message,
-        time: new Date()
+        time: new Date(),
+        user: req.body?.user || 'Guest'
     });
     res.send({ status: 'Message sent' });
 });

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import Pusher from 'pusher-js';
 
 const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
@@ -7,6 +8,7 @@ const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
+  const [user, setUser] = useState('Guest');
 
   useEffect(() => {
     const channel = pusher.subscribe(process.env.NEXT_PUBLIC_PUSHER_CHANNEL);
@@ -15,7 +17,9 @@ const Notifications = () => {
 
       console.log("Incoming data=>", data)
 
-      setNotifications([...notifications, data]);
+      toast.success(data?.message || "Nothing special for you");
+      setUser(data?.user)
+      // setNotifications([...notifications, data]);
 
     });
 
@@ -26,7 +30,7 @@ const Notifications = () => {
 
   return (
     <div>
-      <h2 className='text-red-500'>Notifications</h2>
+      <h2 className='text-red-500'>Hi {user}</h2>
       <ul>
         {notifications.map(notification => (
           <li key={notification.id}>{notification.message}</li>
