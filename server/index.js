@@ -4,6 +4,7 @@ const Pusher = require('pusher');
 const app = express();
 
 const port = process.env.PORT || 3000;
+app.use(express.json());
 
 const pusher = new Pusher({
     appId: process.env.PUSHER_APP_ID,
@@ -27,7 +28,7 @@ app.post('/api/pusher/auth', (req, res) => {
     res.send(auth);
 });
 
-app.get('/api/messages', (req, res) => {
+app.post('/api/messages', (req, res) => {
     const message = req.body.message;
     pusher.trigger('chat-app-test', 'test-event', {
         message: message,
